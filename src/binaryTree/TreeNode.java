@@ -92,5 +92,13 @@ public class TreeNode<T extends Comparable<? super T>> {
         right = tree;
     }
 
+    @Override
+    public String toString() {
+        return "TreeNode{" +
+                "value=" + value +
+                ", left=" + left +
+                ", right=" + right +
+                '}';
+    }
 }
 

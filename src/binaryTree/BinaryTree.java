@@ -1,6 +1,10 @@
 package binaryTree;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
+
 /**
  * A partial implementation of sorted binary trees.
  * <p>
@@ -84,7 +88,7 @@ public class BinaryTree<T extends Comparable<? super T>> implements BTree<T> {
      * Get the value stored at the root of the tree.
      * @return the value stored at the root of the tree.
      */
-    public T getValue() {
+    public T getValue() throws NullPointerException {
         // Note: it might make sense to define getValue() to throw a (custom) exception if an attempt
         // is made to access a value from an empty tree.
         // However, since a tree is empty iff its root node is null, it is also acceptable to rely
@@ -93,7 +97,7 @@ public class BinaryTree<T extends Comparable<? super T>> implements BTree<T> {
 
         // placeholder return value below - replace with implementation of getValue()
         if (!isEmpty()) {
-            return (T) root;
+            return  root.getValue();
         } else throw new NullPointerException();
     }
 
@@ -101,41 +105,39 @@ public class BinaryTree<T extends Comparable<? super T>> implements BTree<T> {
      * Change the value stored at the root of the tree.
      * @param value the new value to be stored at the root of the tree.
      */
-    public void setValue(T value) {
+    public void setValue(T value) throws NullPointerException {
         // implement setValue(T value) here
 
         if (!isEmpty()) {
-            root = (TreeNode<T>) value;
+            root.setValue(value);
         } else {
             throw new NullPointerException();
         }
-
     }
 
     /**
      * Get the left subtree of this tree.
      * @return  This tree's left subtree.
      */
-    public BTree<T> getLeft() {
+    public BTree<T> getLeft() throws NullPointerException {
         // placeholder return value below - replace with implementation of getLeft()
 
-        TreeNode<T> x = null;
         if (!isEmpty()) {
-            x = root;
-            while (x.getLeft() != null) {
-                x = (TreeNode<T>) x.getLeft();
-            }
-        } else return (BTree<T>) x;
-
-        return (BTree<T>) x;
+           return root.getLeft();
+        } else {
+            throw new NullPointerException();
+        }
     }
 
     /**
      * Change the left subtree of this tree.
      * @param tree the new left subtree.
      */
-    public void setLeft(BTree<T> tree) {
+    public void setLeft(BTree<T> tree) throws NullPointerException {
         // implement setLeft(BTree<T> tree) here
+        if (tree.getValue().compareTo(getValue()) > 0) {
+            throw new NullPointerException();
+        } else root.setLeft(tree);
     }
 
     /**
@@ -144,7 +146,11 @@ public class BinaryTree<T extends Comparable<? super T>> implements BTree<T> {
      */
     public BTree<T> getRight() {
         // placeholder return value below - replace with implementation of getRight()
-        return null;
+        if (!isEmpty()) {
+            return root.getRight();
+        } else {
+            throw new NullPointerException();
+        }
     }
 
     /**
@@ -162,7 +168,11 @@ public class BinaryTree<T extends Comparable<? super T>> implements BTree<T> {
      */
     public boolean contains(T value) {
         // placeholder return value below - replace with implementation of contains(T value)
-        return false;
+
+        if (value == null){
+            throw new IllegalArgumentException();
+        }
+        return root.getValue() != null;
     }
 
     /**
@@ -171,7 +181,49 @@ public class BinaryTree<T extends Comparable<? super T>> implements BTree<T> {
      */
     public List<T> traverse() {
         // placeholder return value below - replace with implementation of traverse()
+//        BinaryTree<T> tree = new BinaryTree<>();
+//        ArrayList array = new ArrayList();
+//        inOrderTraverse(tree, array);
         return null;
     }
-}
 
+    public void inOrderTraverse(TreeNode root) {
+        ArrayList arrayList = new ArrayList();
+        if (root != null) {
+            inOrderTraverse((TreeNode) root.getLeft());
+            inOrderTraverse((TreeNode) root.getRight());
+        }
+
+
+    }
+
+    @Override
+    public String toString() {
+        if (isEmpty()) {
+            return "[]";
+        } else {
+            return "BinaryTree{" +
+                    "root=" + root +
+                    ", NullPointerException=" + NullPointerException +
+                    '}';
+        }
+    }
+
+    public static void main(String[] args) {
+        BinaryTree tree = new BinaryTree();
+
+        tree.insert(8);
+        tree.insert(2);
+        tree.insert(1);
+        tree.insert(10);
+        tree.insert(9);
+//        tree.insert(-1);
+//        tree.insert(-2);
+//        tree.insert(-3);
+//        tree.insert(-4);
+//        tree.insert(-5);
+        System.out.println(tree.getValue());
+        System.out.println(tree.getLeft().getLeft().getValue());
+        System.out.println(tree.getLeft().getValue());
+    }
+}
