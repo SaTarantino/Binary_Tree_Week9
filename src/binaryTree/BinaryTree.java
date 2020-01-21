@@ -1,9 +1,7 @@
 package binaryTree;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 /**
  * A partial implementation of sorted binary trees.
@@ -96,6 +94,7 @@ public class BinaryTree<T extends Comparable<? super T>> implements BTree<T> {
         // This comment also applies to the other get and set methods defined in this interface.
 
         // placeholder return value below - replace with implementation of getValue()
+
         if (!isEmpty()) {
             return  root.getValue();
         } else throw new NullPointerException();
@@ -135,6 +134,7 @@ public class BinaryTree<T extends Comparable<? super T>> implements BTree<T> {
      */
     public void setLeft(BTree<T> tree) throws NullPointerException {
         // implement setLeft(BTree<T> tree) here
+
         if (tree.getValue().compareTo(getValue()) > 0) {
             throw new NullPointerException();
         } else root.setLeft(tree);
@@ -146,6 +146,7 @@ public class BinaryTree<T extends Comparable<? super T>> implements BTree<T> {
      */
     public BTree<T> getRight() {
         // placeholder return value below - replace with implementation of getRight()
+
         if (!isEmpty()) {
             return root.getRight();
         } else {
@@ -159,6 +160,10 @@ public class BinaryTree<T extends Comparable<? super T>> implements BTree<T> {
      */
     public void setRight(BTree<T> tree) {
         // implement setRight(BTree<T> tree) here
+
+        if (tree.getValue().compareTo(getValue()) > 0) {
+            throw new NullPointerException();
+        } else root.setRight(tree);
     }
 
     /**
@@ -169,10 +174,17 @@ public class BinaryTree<T extends Comparable<? super T>> implements BTree<T> {
     public boolean contains(T value) {
         // placeholder return value below - replace with implementation of contains(T value)
 
-        if (value == null){
-            throw new IllegalArgumentException();
+        if (isEmpty()) {
+            return false;
+        } else if (getValue().compareTo(value) == 0) {
+            return true;
+        } else if (value.compareTo(getValue()) < 0) {
+            return getLeft().contains(value);
+        } else if (value.compareTo(getValue()) > 0) {
+            return getRight().contains(value);
         }
-        return root.getValue() != null;
+
+        return false;
     }
 
     /**
@@ -181,49 +193,23 @@ public class BinaryTree<T extends Comparable<? super T>> implements BTree<T> {
      */
     public List<T> traverse() {
         // placeholder return value below - replace with implementation of traverse()
-//        BinaryTree<T> tree = new BinaryTree<>();
-//        ArrayList array = new ArrayList();
-//        inOrderTraverse(tree, array);
-        return null;
+
+        List<T> trv = new ArrayList<T>();
+        inOrderTraverse(trv);
+        return trv;
     }
 
-    public void inOrderTraverse(TreeNode root) {
-        ArrayList arrayList = new ArrayList();
-        if (root != null) {
-            inOrderTraverse((TreeNode) root.getLeft());
-            inOrderTraverse((TreeNode) root.getRight());
-        }
+    /**
+     * Recursive method for the traverse method.
+     * @param list
+     */
+    public void inOrderTraverse(List<T> list) {
 
-
-    }
-
-    @Override
-    public String toString() {
         if (isEmpty()) {
-            return "[]";
-        } else {
-            return "BinaryTree{" +
-                    "root=" + root +
-                    ", NullPointerException=" + NullPointerException +
-                    '}';
+            return;
         }
-    }
-
-    public static void main(String[] args) {
-        BinaryTree tree = new BinaryTree();
-
-        tree.insert(8);
-        tree.insert(2);
-        tree.insert(1);
-        tree.insert(10);
-        tree.insert(9);
-//        tree.insert(-1);
-//        tree.insert(-2);
-//        tree.insert(-3);
-//        tree.insert(-4);
-//        tree.insert(-5);
-        System.out.println(tree.getValue());
-        System.out.println(tree.getLeft().getLeft().getValue());
-        System.out.println(tree.getLeft().getValue());
+        ((BinaryTree<T>)getLeft()).inOrderTraverse(list);
+        list.add(getValue());
+        ((BinaryTree<T>)getRight()).inOrderTraverse(list);
     }
 }
